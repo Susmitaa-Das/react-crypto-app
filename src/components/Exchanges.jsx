@@ -12,7 +12,7 @@ const Exchanges = () => {
   useEffect(() => {
     const fetchExchanges = async () => {
      try {
-      const { data } = await axios.get(`${server}/exchangeghs`)
+      const { data } = await axios.get(`${server}/exchanges`)
 
       setExchanges(data)
       setLoading(false)
@@ -69,8 +69,8 @@ const ExchangeCard = ({ name, img, rank, url }) => (
       <Heading size={'md'} noOfLines={1}>
         {rank}
       </Heading>
+      <Text noOfLines={1}>{name}</Text>
     </VStack>
-    <Text noOfLines={1}>{name}</Text>
   </a>
 )
 
