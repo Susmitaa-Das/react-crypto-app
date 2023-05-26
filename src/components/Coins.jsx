@@ -10,24 +10,26 @@ const Coins = () => {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
   const [page, setPage] = useState(1)
+  const [currency, setCurrency] = useState('inr')
   useEffect(() => {
     const fetchCoins = async () => {
-     try {
-      const { data } = await axios.get(`${server}/coins/markets?vs_currency=inr`)
+      try {
+        const { data } = await axios.get(
+          `${server}/coins/markets?vs_currency=${currency}&page=${page}`
+        )
 
-      setCoins(data)
-      console.log(data)
-      setLoading(false)
-      
-     } catch (error) {
-      setError(true)
-      setLoading(false)
-     }
+        setCoins(data)
+        setLoading(false)
+      } catch (error) {
+        setError(true)
+        setLoading(false)
+      }
     }
     fetchCoins()
-  }, [])
+  }, [currency, page])
 
-  if(error) return <ErrorComponent message={"Error while Fetching exchanges"}/>
+  if (error)
+    return <ErrorComponent message={'Error while Fetching coins'} />
 
   return (
     <Container maxW={'container.xl'}>
@@ -62,9 +64,9 @@ const ExchangeCard = ({ name, img, rank, url }) => (
       transition={'all 0.3s'}
       m={'4'}
       css={{
-        '&:hover':{
-          transform:'scale(1.1)'
-        }
+        '&:hover': {
+          transform: 'scale(1.1)',
+        },
       }}
     >
       <img src={img} w={'10'} h={'10'} objectfit={'contain'} alt={'Exchange'} />
