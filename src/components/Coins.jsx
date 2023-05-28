@@ -4,9 +4,6 @@ import { server } from '../index'
 import {
   Container,
   HStack,
-  Heading,
-  VStack,
-  Text,
   Button,
   RadioGroup,
   Radio,
@@ -64,7 +61,7 @@ const Coins = () => {
           </HStack>
         </RadioGroup>
 
-          <HStack wrap={'wrap'}>
+          <HStack wrap={'wrap'} justifyContent={'space-evenly'}>
             {coins.map((i) => (
               <CoinCard
                 id={i.id}
@@ -81,6 +78,7 @@ const Coins = () => {
           <HStack w={'full'} overflowX={'auto'} p={'8'}>
             {btns.map((item, index) => (
               <Button
+                key={index}
                 bgColor={'blackAlpha.900'}
                 color={'white'}
                 onClick={() => changePage(index+1)}
