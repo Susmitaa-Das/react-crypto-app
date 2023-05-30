@@ -100,7 +100,14 @@ const CoinDetails = () => {
             <Badge fontSize={'2xl'} bgColor={'blackAlpha.800'} color={'white'}>
               {`#${coin.market_cap_rank}`}
             </Badge>
-            <CustomBar high={232} low={40}/>
+            <CustomBar
+              high={`${currencySymbol}${coin.market_data.high_24h[currency]}`}
+              low={`${currencySymbol}${coin.market_data.low_24h[currency]}`}
+            />
+            <Box w={'full'} p='4'>
+              <Item title={'Max Supply'} value={'45521'} />
+
+            </Box>
           </VStack>
         </>
       )}
@@ -108,10 +115,21 @@ const CoinDetails = () => {
   )
 }
 
-const CustomBar = ({high,low})=>(
+const Item=({title,value})=>(
+  <HStack justifyContent={'space-between'} w={'full'} my={'4'}>
+    <Text fontFamily={'Bebas Neue'} letterSpacing={'widest'}>{title}</Text>
+    <Text>{value}</Text>
+  </HStack>
+)
+
+const CustomBar = ({ high, low }) => (
   <VStack w={'full'}>
-    <Progress value={50} colorScheme={'teal'} w={'full'}/>
-    <HStack justifyContent={'space-between'} w={'full'}></HStack>
+    <Progress value={50} colorScheme={'teal'} w={'full'} />
+    <HStack justifyContent={'space-between'} w={'full'}>
+      <Badge children={'low'} colorScheme={'red'} />
+      <Text fontSize={'sm'}>24H Range</Text>
+      <Badge children={'high'} colorScheme={'green'} />
+    </HStack>
   </VStack>
 )
 export default CoinDetails
