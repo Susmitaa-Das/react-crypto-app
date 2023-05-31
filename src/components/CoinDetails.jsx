@@ -14,6 +14,7 @@ import {
   StatArrow,
   Badge,
   Progress,
+  Button,
 } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
 import Loader from './Loader'
@@ -21,24 +22,33 @@ import { useParams } from 'react-router-dom'
 import axios from 'axios'
 import { server } from '../index'
 import ErrorComponent from './ErrorComponent'
+import Chart from './Chart'
+
 
 const CoinDetails = () => {
+  const params = useParams()
   const [coin, setCoin] = useState({})
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
   const [currency, setCurrency] = useState('inr')
+  const [days, setDays] = useState('24h')
+  const [chartArray, setChartArray] = useState([])
 
   const currencySymbol =
     currency === 'inr' ? '₹' : currency === 'eur' ? '€' : '$'
+    const btns=['24h','7d','14d','30d','60d','200d','1y','max']
 
-  const params = useParams()
+  
 
   useEffect(() => {
     const fetchCoin = async () => {
       try {
         const { data } = await axios.get(`${server}/coins/bitcoin`)
-        console.log(data)
+
+        const { data:chartData } = await axios.get(`${server}/coins/bitcoin/market_chart?vs_currency=${currency}&days=${days}`)
+       
         setCoin(data)
+        setChartArray(chartData.prices)
         setLoading(false)
       } catch (error) {
         setError(true)
@@ -57,8 +67,18 @@ const CoinDetails = () => {
       ) : (
         <>
           <Box width={'full'} borderWidth={1}>
-            hjjmtj
+           <Chart arr={chartArray} currency={currencySymbol} days={days} />
           </Box>
+
+          <HStack p='4' wrap={'wrap'}>
+            {
+              btns.map((i)=>(
+                <Button></Button>
+              ))
+            }
+
+          </HStack>
+
 
           <RadioGroup value={currency} onChange={setCurrency} p={'8'}>
             <HStack spacing={'4'}>
@@ -104,9 +124,25 @@ const CoinDetails = () => {
               high={`${currencySymbol}${coin.market_data.high_24h[currency]}`}
               low={`${currencySymbol}${coin.market_data.low_24h[currency]}`}
             />
-            <Box w={'full'} p='4'>
-              <Item title={'Max Supply'} value={'45521'} />
+            <Box w={'full'} p="4">
+              <Item title={'Max Supply'} value={coin.market_data.max_supply} />
+              <Item
+                title={'Circulating Supply'}
+                value={coin.market_data.circulating_supply}
+              />
 
+              <Item
+                title={'Market Cap'}
+                value={`${currencySymbol}${coin.market_data.market_cap[currency]}`}
+              />
+              <Item
+                title={'All Time Low'}
+                value={`${currencySymbol}${coin.market_data.atl[currency]}`}
+              />
+              <Item
+                title={'All Time High'}
+                value={`${currencySymbol}${coin.market_data.ath[currency]}`}
+              />
             </Box>
           </VStack>
         </>
@@ -115,9 +151,11 @@ const CoinDetails = () => {
   )
 }
 
-const Item=({title,value})=>(
+const Item = ({ title, value }) => (
   <HStack justifyContent={'space-between'} w={'full'} my={'4'}>
-    <Text fontFamily={'Bebas Neue'} letterSpacing={'widest'}>{title}</Text>
+    <Text fontFamily={'Bebas Neue'} letterSpacing={'widest'}>
+      {title}
+    </Text>
     <Text>{value}</Text>
   </HStack>
 )
