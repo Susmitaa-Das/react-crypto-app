@@ -25,7 +25,7 @@
  import Chart from './Chart'
 
  const CoinDetails = () => {
-   const params = useParams()
+   const {params} = useParams()
    const [coin, setCoin] = useState({})
    const [loading, setLoading] = useState(true)
    const [error, setError] = useState(false)
