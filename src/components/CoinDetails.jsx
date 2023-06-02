@@ -25,7 +25,7 @@
  import Chart from './Chart'
 
  const CoinDetails = () => {
-   const {params} = useParams()
+   const params = useParams()
    const [coin, setCoin] = useState({})
    const [loading, setLoading] = useState(true)
    const [error, setError] = useState(false)
@@ -89,10 +89,10 @@
    useEffect(() => {
      const fetchCoin = async () => {
        try {
-         const { data } = await axios.get(`${server}/coins/${params.id}`)
+         const { data } = await axios.get(`${server}/coins/id`)
 
          const { data: chartData } = await axios.get(
-           `${server}/coins/${params.id}/market_chart?vs_currency=${currency}&days=${days}`
+           `${server}/coins/id/market_chart?vs_currency=${currency}&days=${days}`
          )
 
          setCoin(data)
@@ -118,13 +118,17 @@
              <Chart arr={chartArray} currency={currencySymbol} days={days} />
            </Box>
 
-           <HStack p="4" wrap={'wrap'}>
-             {btns.map((i) => (
-               <Button key={i} onClick={() => switchChartStats(i)}>
-                 {i}
-               </Button>
-             ))}
-           </HStack>
+           <HStack p="4" overflowX={"auto"}>
+            {btns.map((i) => (
+              <Button
+                disabled={days === i}
+                key={i}
+                onClick={() => switchChartStats(i)}
+              >
+                {i}
+              </Button>
+            ))}
+          </HStack>
 
            <RadioGroup value={currency} onChange={setCurrency} p={'8'}>
              <HStack spacing={'4'}>

@@ -61,7 +61,7 @@ const ExchangeCard = ({ name, img, rank, url }) => (
       m={'4'}
       css={{
         '&:hover':{
-          transform:'scale(1.1)'
+          transform:'scale(1.1)',
         }
       }}
     >
